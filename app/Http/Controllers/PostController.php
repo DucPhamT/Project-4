@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Comment;
+
 class PostController extends Controller
 {
     //them moi bai viet
@@ -109,7 +111,18 @@ class PostController extends Controller
 
         }
     }
-    public function getPostFromCategory() {
-        
+    public function getPostFromCategory($categoryId)
+    {
+        try {
+            $category = Category::findOrFail($categoryId);
+
+            $post = $category->posts()->with('user');
+            return response()->json([
+                'status' => 'success',
+                'category' => $category,
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
     }
 }

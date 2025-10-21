@@ -12,15 +12,18 @@ Route::get('testing', function () {
     return 'this is a testing';
 });
 
+Route::prefix('posts')->group(function () {
+    Route::get('add-post', [PostController::class, 'store']);
 
-Route::get('add-post', [PostController::class, 'store']);
+    Route::get('show-post', [PostController::class, 'index']);
 
-Route::get('show-post', [PostController::class, 'index']);
+    Route::put('update/{id}', [PostController::class, 'update']);
 
-Route::put('update/{id}', [PostController::class, 'update']);
+    Route::delete('delete/{id}', [PostController::class, 'delete']);
 
-Route::delete('delete/{id}', [PostController::class, 'delete']);
+    Route::get('top-five-users', [PostController::class, 'topFiveUser']);
 
-Route::get('top-five-users', [PostController::class, 'topFiveUser']);
+    Route::get('post-without-comment', [PostController::class, 'postNoComment']);
 
-Route::get('post-without-comment', [PostController::class, 'postNoComment']);
+    Route::get('category/{category}', [PostController::class, 'getPostFromCategory']);
+});
