@@ -24,7 +24,7 @@ class User extends Authenticatable
         'password',
         'role',
     ];
-    
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -61,4 +61,8 @@ class User extends Authenticatable
         return $this->hasMany(Comment::class);
     }
 
+    public function latestPost()
+    {
+        return $this->hasOne(Post::class)->latestOfMany();
+    }
 }
