@@ -1,13 +1,15 @@
 <?php
 
+
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use Faker\Guesser\Name;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Comment;
-
+use Illuminate\Support\Facades\DB;
 class PostController extends Controller
 {
     //them moi bai viet
@@ -87,21 +89,7 @@ class PostController extends Controller
 
 
     //level-up api
-    public function topFiveUser(User $user)
-    {
-        try {
-            $topUsers = User::withCount('posts')
-                ->orderBy('posts_count', 'DESC')
-                ->take(5)
-                ->get('id', 'name', 'email', 'posts_count');
-            return response()->json($topUsers);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage(),
-
-            ], 500);
-        }
-    }
+    
     public function postNoComment()
     {
         try {
@@ -113,16 +101,34 @@ class PostController extends Controller
     }
     public function getPostFromCategory($categoryId)
     {
+
         try {
             $category = Category::findOrFail($categoryId);
 
-            $post = $category->posts()->with('user');
-            return response()->json([
-                'status' => 'success',
-                'category' => $category,
-            ]);
+            $post = $category->posts()->get();
+            if ($post->isEmpty()) {
+                return response()->json([
+                    'message' => 'No posts found in this category'
+                ]);
+            } else
+                return response()->json([
+                    'status' => 'success',
+                    'category' => $category->name,
+                ]);
         } catch (\Throwable $th) {
             //throw $th;
         }
+    }
+
+
+
+    public function getUserLatestPost()
+    {
+        $data = User::select('id', 'user_name')->with('latestPost')->get();
+
+        return response()->json([
+
+            'data' => $data,
+        ], 200);
     }
 }
