@@ -44,4 +44,13 @@ class UserController extends Controller
         }
 
     }
+    public function getUserLatestPost()
+    {
+        $data = User::select('id', 'user_name')->with('latestPost')->get();
+
+        return response()->json([
+
+            'data' => $data,
+        ], 200);
+    }
 }
