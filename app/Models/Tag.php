@@ -10,7 +10,7 @@ class Tag extends Model
 
         'content',
     ];
-    public function users()
+    public function user()
     { //1 tag chi thuoc ve 1 user
         return $this->belongsTo(User::class);
     }

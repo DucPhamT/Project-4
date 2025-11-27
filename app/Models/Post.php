@@ -12,9 +12,8 @@ class Post extends Model
         'title',
         'content',
         'thumbnail',
-
     ];
-    public function users() //1 post chi thuoc ve 1 user
+    public function user() //1 post chi thuoc ve 1 user
     {
         return $this->belongsTo(User::class);
     }
